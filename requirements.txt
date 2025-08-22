@@ -41,6 +41,7 @@ gruut[de,es,fr]==2.2.3
 # deps for korean
 jamo
 nltk
+indic-numtowords
 g2pkk>=0.1.1
 # deps for bangla
 bangla
