@@ -38,7 +38,9 @@ class UrduPhonemizer(BasePhonemizer):
         text = normalize_urdu_text(text)
         
         # Get phonemes
+        print(f"🔎 UrduPhonemizer is processing: {text[:50]}...")
         phonemes = urdu_text_to_phonemes(text, use_espeak=self.use_espeak)
+        print(f"👉 Produced phonemes: {phonemes[:50]}...")
         
         # Apply separator if specified
         if separator and separator != "":
