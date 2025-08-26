@@ -111,6 +111,10 @@ def train_gpt(metadatas, num_epochs, batch_size, grad_acumm, output_path, max_au
     config = GPTTrainerConfig()
     config.load_json(XTTS_CONFIG_FILE)
     config.epochs = num_epochs
+    config.use_phonemes = True
+    config.phonemizer = "urdu_phonemizer"
+    config.phoneme_cache_path = "/kaggle/working/phoneme_cache"
+    config.phoneme_language = "ur"
     config.output_path = OUT_PATH
     config.model_args = model_args
     config.run_name = RUN_NAME
@@ -120,7 +124,7 @@ def train_gpt(metadatas, num_epochs, batch_size, grad_acumm, output_path, max_au
     config.logger_uri = LOGGER_URI
     config.audio = audio_config
     config.batch_size = BATCH_SIZE
-    config.num_loader_workers = 8
+    config.num_loader_workers = 4
     config.eval_split_max_size = 256
     config.print_step = 50
     config.plot_step = 100
