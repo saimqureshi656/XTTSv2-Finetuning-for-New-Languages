@@ -58,6 +58,7 @@ def get_phonemizer_by_name(name: str, **kwargs) -> BasePhonemizer:
         kwargs (dict):
             Extra keyword arguments that should be passed to the phonemizer.
     """
+    print(f"[URDU_PHONEMIZER] get_phonemizer_by_name called with: {name}")
     if name == "espeak":
         return ESpeak(**kwargs)
     if name == "gruut":
@@ -75,10 +76,14 @@ def get_phonemizer_by_name(name: str, **kwargs) -> BasePhonemizer:
     if name == "be_phonemizer":
         return BEL_Phonemizer(**kwargs)
     if name == "urdu_phonemizer":
+        print(f"[URDU_PHONEMIZER] Creating UrduPhonemizer instance with kwargs: {kwargs}")
         return UrduPhonemizer(**kwargs)
+
+    print(f"[URDU_PHONEMIZER] WARNING: Phonemizer {name} not found!")
     raise ValueError(f"Phonemizer {name} not found")
 
 
 if __name__ == "__main__":
     print(DEF_LANG_TO_PHONEMIZER)
+
 
