@@ -14,7 +14,9 @@ CUSTOM_PHONEME_DICT = {
     "سروس": "sər.wis",
     "لطف": "lət̪f",
     "ہنسی": "hən.siː",
-    "لین دین": "leːn deːn"
+    "لین دین": "leːn deːn",
+    "کھلاڑی": "kʰə.lɑː.ɽiː",
+    
     # Add more problematic words as you discover them
     # "word": "phoneme",
 }
