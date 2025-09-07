@@ -1,17 +1,48 @@
-# File: /TTS/tts/utils/text/urdu/phonemizer.py (Enhanced Version)
+# File: /TTS/tts/utils/text/urdu/phonemizer.py (Enhanced Version with Custom Dictionary)
 
 import subprocess
 import re
-from typing import Optional
+from typing import Optional, Dict
 from .normalize import normalize_urdu_text, preprocess_for_tts
 
-def urdu_text_to_phonemes(text: str, use_espeak: bool = True) -> str:
+# Custom phoneme dictionary for problematic words
+CUSTOM_PHONEME_DICT = {
+    # Islamic greetings and common phrases
+    "assalam": "ɑsːɑlɑːm",
+    "alaikum": "ɑlɑɪkum", 
+    "اسلام علیکم": "əs.sɑː.ləm uː ə.leɪ.kʊm",
+    "سروس": "sər.wis",
+    "لطف": "lət̪f",
+    "ہنسی": "hən.siː",
+    "لین دین": "leːn deːn"
+    # Add more problematic words as you discover them
+    # "word": "phoneme",
+}
+
+def add_custom_phoneme(word: str, phoneme: str):
+    """Add a new word-phoneme mapping to the custom dictionary"""
+    CUSTOM_PHONEME_DICT[word.lower()] = phoneme
+    
+def load_custom_phonemes_from_file(file_path: str):
+    """Load custom phonemes from a file (word|phoneme format)"""
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if line and '|' in line:
+                    word, phoneme = line.split('|', 1)
+                    CUSTOM_PHONEME_DICT[word.lower().strip()] = phoneme.strip()
+    except FileNotFoundError:
+        print(f"Custom phoneme file not found: {file_path}")
+
+def urdu_text_to_phonemes(text: str, use_espeak: bool = True, use_custom_dict: bool = True) -> str:
     """
-    Convert Urdu text to IPA phonemes using espeak-ng with enhanced fallback
+    Convert Urdu text to IPA phonemes with custom dictionary fallback
     
     Args:
         text: Input Urdu text
         use_espeak: Use espeak-ng for phonemization
+        use_custom_dict: Use custom dictionary for known problematic words
     
     Returns:
         IPA phonemes string
@@ -19,14 +50,47 @@ def urdu_text_to_phonemes(text: str, use_espeak: bool = True) -> str:
     # Preprocess text first
     text = preprocess_for_tts(text)
     
-    if use_espeak:
-        phonemes = _urdu_espeak_phonemize(text)
-        # If espeak gives reasonable output, use it; otherwise fallback
-        if phonemes and len(phonemes) > 0 and not phonemes.isspace():
-            return phonemes
+    # Split text into words for individual processing
+    words = text.split()
+    phoneme_results = []
     
-    # Fallback to enhanced rule-based approach
-    return _urdu_rule_based_phonemize(text)
+    for word in words:
+        # Clean the word (remove punctuation for lookup)
+        clean_word = re.sub(r'[^\w\s]', '', word.lower())
+        
+        word_phoneme = ""
+        
+        # Step 1: Check custom dictionary first
+        if use_custom_dict and clean_word in CUSTOM_PHONEME_DICT:
+            word_phoneme = CUSTOM_PHONEME_DICT[clean_word]
+            print(f"Custom dict used for '{clean_word}': {word_phoneme}")
+        
+        # Step 2: If not in custom dict, try espeak
+        elif use_espeak:
+            word_phoneme = _urdu_espeak_phonemize(word)
+            if word_phoneme and len(word_phoneme.strip()) > 0:
+                print(f"Espeak used for '{word}': {word_phoneme}")
+            else:
+                # Step 3: Fallback to rule-based if espeak fails
+                word_phoneme = _urdu_rule_based_phonemize(word)
+                print(f"Rule-based used for '{word}': {word_phoneme}")
+        
+        # Step 3: Direct fallback to rule-based if espeak disabled
+        else:
+            word_phoneme = _urdu_rule_based_phonemize(word)
+            print(f"Rule-based used for '{word}': {word_phoneme}")
+        
+        # Add the result
+        if word_phoneme:
+            phoneme_results.append(word_phoneme)
+    
+    # Join all phonemes
+    final_phonemes = ' '.join(phoneme_results)
+    
+    # Final cleanup
+    final_phonemes = re.sub(r'\s+', ' ', final_phonemes).strip()
+    
+    return final_phonemes
 
 def _urdu_espeak_phonemize(text: str) -> str:
     """Use espeak-ng for Urdu phonemization with better error handling"""
@@ -42,9 +106,18 @@ def _urdu_espeak_phonemize(text: str) -> str:
             phonemes = re.sub(r'[()]+', '', phonemes)
             return phonemes.strip()
         
+        # Try with Hindi voice as fallback (similar phonetics)
+        cmd = ["espeak-ng", "-q", "-v", "hi", "--ipa", text]
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
+        
+        if result.returncode == 0 and result.stdout.strip():
+            phonemes = result.stdout.strip()
+            phonemes = re.sub(r'\s+', ' ', phonemes)
+            phonemes = re.sub(r'[()]+', '', phonemes)
+            return phonemes.strip()
 
-    except (subprocess.TimeoutExpired, FileNotFoundError, Exception):
-        pass
+    except (subprocess.TimeoutExpired, FileNotFoundError, Exception) as e:
+        print(f"Espeak failed for '{text}': {e}")
     
     # Return empty string to trigger rule-based fallback
     return ""
@@ -198,9 +271,53 @@ def _apply_urdu_phonetic_rules(phonemes: str) -> str:
     
     return phonemes
 
+# Utility functions for managing custom dictionary
+def export_custom_dict_to_file(file_path: str):
+    """Export current custom dictionary to a file"""
+    with open(file_path, 'w', encoding='utf-8') as f:
+        for word, phoneme in sorted(CUSTOM_PHONEME_DICT.items()):
+            f.write(f"{word}|{phoneme}\n")
+
+def get_phonemization_stats(text: str):
+    """Get statistics on which method was used for each word"""
+    words = text.split()
+    stats = {"custom": 0, "espeak": 0, "rule_based": 0}
+    
+    for word in words:
+        clean_word = re.sub(r'[^\w\s]', '', word.lower())
+        
+        if clean_word in CUSTOM_PHONEME_DICT:
+            stats["custom"] += 1
+        else:
+            espeak_result = _urdu_espeak_phonemize(word)
+            if espeak_result and len(espeak_result.strip()) > 0:
+                stats["espeak"] += 1
+            else:
+                stats["rule_based"] += 1
+    
+    return stats
+
 # Keep the original normalize function for backward compatibility
 def normalize_urdu_text(text: str) -> str:
     """Normalize Urdu text for better phonemization"""
     # Use the enhanced normalize function
     from .normalize import normalize_urdu_text as enhanced_normalize
     return enhanced_normalize(text)
+
+# Example usage and testing
+if __name__ == "__main__":
+    # Test the phonemizer
+    test_texts = [
+        "السلام علیکم",           # Urdu script - will use CUSTOM_DICT
+        "assalam u alaikum",      # Roman - will use CUSTOM_DICT  
+        "bismillah hir rahman",   # Mixed - will use CUSTOM_DICT + others
+        "pakistan zindabad",      # Mixed - will use CUSTOM_DICT + others
+        "یہ ایک ٹیسٹ ہے"          # Pure Urdu - will use RULE_BASED
+    ]
+    
+    for text in test_texts:
+        print(f"\nText: {text}")
+        phonemes = urdu_text_to_phonemes(text)
+        print(f"Phonemes: {phonemes}")
+        stats = get_phonemization_stats(text)
+        print(f"Stats: {stats}")
