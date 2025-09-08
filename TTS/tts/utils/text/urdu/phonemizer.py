@@ -8,22 +8,48 @@ from .normalize import normalize_urdu_text, preprocess_for_tts
 # Custom phoneme dictionary for problematic words
 CUSTOM_PHONEME_DICT = {
     # Islamic greetings and common phrases
-    "السلام علیکم": "əs.sɑː.ləm uː ə.leɪ.kʊm",
-    "السلام": "əs.sɑː.ləm uː",
-    "علیکم": "ə.leɪ.kʊm",
-    #"وعلیکم": "/wa ʕa.laj.kum/",
-    "سروس": "/ˈsərvɪs/",
-    "لطف": "lʊt̪f",
-    "ہنسی": "/hɛ̃ː.siː/",
-    "لین": "leːn",
-    "دین": " deːn",
-    "کھلاڑی": "kʰɪ.lɑː.ɽiː",
-    "سنوارتے": "sə̃.wɑːr.t̪eː",
-    "اسکول": "ɪs.kuːl",
-    "خوش": "xʊʃ",
-    "کسٹمر": "kəs.tə.mər",
-    "فراہم": "fə.rɑː.həm",
-    "کھلاڑیوں": "kʰɪ.lɑː.ɽi.jõː",
+    "assalam": "ɑsːɑlɑːm",
+    "alaikum": "ɑlɑɪkum", 
+    "assalamu": "ɑsːɑlɑːmu",
+    "walaikum": "ʋɑlɑɪkum",
+    "bismillah": "bɪsmɪlɑː",
+    "inshallah": "ɪnʃɑːlɑː",
+    "mashallah": "mɑːʃɑːlɑː",
+    "subhanallah": "subɦɑːnɑlɑː",
+    "alhamdulillah": "ɑlɦɑmduːlɪlɑː",
+    "astaghfirullah": "ɑst̪ɑɣfɪruːlɑː",
+    
+    # Common Urdu words that espeak handles poorly
+    "pakistan": "pɑːkɪst̪ɑːn",
+    "lahore": "lɑːɦoːr",
+    "karachi": "kərɑːt͡ʃiː",
+    "islamabad": "ɪslɑːmɑːbɑːd",
+    "punjab": "pənd͡ʒɑːb",
+    "sindh": "sɪnd̪ʰ",
+    "balochistan": "bəloːt͡ʃɪst̪ɑːn",
+    "khyber": "xaɪbər",
+    "pakhtunkhwa": "pəxt̪uːnxʋɑː",
+    
+    # Common names
+    "muhammad": "muɦɑmmɑd̪",
+    "ahmed": "ɑɦməd̪",
+    "fatima": "fɑːt̪ɪmɑː",
+    "aisha": "ɑːɪʃɑː",
+    "hassan": "ɦəsən",
+    "hussain": "ɦusɛːn",
+    "ali": "ɑliː",
+    
+    # Numbers in words
+    "ek": "ek",
+    "do": "d̪oː",
+    "teen": "t̪iːn",
+    "char": "t͡ʃaːr",
+    "panch": "paːnt͡ʃ",
+    "chhe": "t͡ʃʰeː",
+    "saat": "saːt̪",
+    "aath": "aːʈʰ",
+    "nau": "nəʊ",
+    "das": "d̪ɑs",
     
     # Add more problematic words as you discover them
     # "word": "phoneme",
@@ -71,7 +97,7 @@ def urdu_text_to_phonemes(text: str, use_espeak: bool = True, use_custom_dict: b
         word_phoneme = ""
         
         # Step 1: Check custom dictionary first
-        if clean_word in CUSTOM_PHONEME_DICT:
+        if use_custom_dict and clean_word in CUSTOM_PHONEME_DICT:
             word_phoneme = CUSTOM_PHONEME_DICT[clean_word]
             print(f"Custom dict used for '{clean_word}': {word_phoneme}")
         
