@@ -24,6 +24,7 @@ CUSTOM_PHONEME_DICT = {
     "کسٹمر": "kəs.tə.mər",
     "فراہم": "fə.rɑː.həm",
     "کھلاڑیوں": "kʰɪ.lɑː.ɽi.jõː",
+    "میٹنگ": "miː.ʈɪŋ",
     
     # Add more problematic words as you discover them
     # "word": "phoneme",
@@ -59,6 +60,11 @@ def urdu_text_to_phonemes(text: str, use_espeak: bool = True, use_custom_dict: b
     """
     # Preprocess text first
     text = preprocess_for_tts(text)
+
+        # Step 1: Check if the full text matches a dictionary entry
+    if use_custom_dict and text in CUSTOM_PHONEME_DICT:
+        print(f"Custom dict used for full phrase '{text}': {CUSTOM_PHONEME_DICT[text]}")
+        return CUSTOM_PHONEME_DICT[text]
     
     # Split text into words for individual processing
     words = text.split()
@@ -71,7 +77,7 @@ def urdu_text_to_phonemes(text: str, use_espeak: bool = True, use_custom_dict: b
         word_phoneme = ""
         
         # Step 1: Check custom dictionary first
-        if use_custom_dict and clean_word in CUSTOM_PHONEME_DICT:
+        if clean_word in CUSTOM_PHONEME_DICT:
             word_phoneme = CUSTOM_PHONEME_DICT[clean_word]
             print(f"Custom dict used for '{clean_word}': {word_phoneme}")
         
