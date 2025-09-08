@@ -8,9 +8,9 @@ from .normalize import normalize_urdu_text, preprocess_for_tts
 # Custom phoneme dictionary for problematic words
 CUSTOM_PHONEME_DICT = {
     # Islamic greetings and common phrases
-    "السلام علیکم": "əs.sɑː.ləm uː ə.leɪ.kʊm",
-    "السلام": "ælsælæmu",
-    "علیکم": "ɑlɪkæm",
+    "السلام علیکم": "æs.sæ.læː.m ʊ a.lɛɪ.kʊm",
+    "السلام": "as.sæ.læː.m ʊ",
+    "علیکم": "a.lɛɪ.kʊm",
     #"وعلیکم": "/wa ʕa.laj.kum/",
     "سروس": "sərvɪs",
     "لطف": "lʊt̪f",
@@ -60,12 +60,6 @@ def urdu_text_to_phonemes(text: str, use_espeak: bool = True, use_custom_dict: b
     """
     # Preprocess text first
     text = preprocess_for_tts(text)
-
-        # Step 1: Check if the full text matches a dictionary entry
-    if use_custom_dict and text in CUSTOM_PHONEME_DICT:
-        print(f"Custom dict used for full phrase '{text}': {CUSTOM_PHONEME_DICT[text]}")
-        return CUSTOM_PHONEME_DICT[text]
-    
     # Split text into words for individual processing
     words = text.split()
     phoneme_results = []
