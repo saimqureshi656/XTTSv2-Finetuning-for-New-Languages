@@ -8,9 +8,6 @@ from .normalize import normalize_urdu_text, preprocess_for_tts
 # Custom phoneme dictionary for problematic words
 CUSTOM_PHONEME_DICT = {
     # Islamic greetings and common phrases
-    "assalam": "ɑsːɑlɑːm",
-    "alaikum": "ɑlɑɪkum", 
-    "اسلام علیکم": "as.sɑː.ləm uː ə.leɪ.kʊm",
     "السلام": "ɑsːɑlɑːm"
     "علیکم": "ə.leɪ.kʊm"
     "سروس": "sər.wis",
