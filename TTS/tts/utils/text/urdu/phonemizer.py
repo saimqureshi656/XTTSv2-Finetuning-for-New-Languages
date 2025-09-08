@@ -8,13 +8,21 @@ from .normalize import normalize_urdu_text, preprocess_for_tts
 # Custom phoneme dictionary for problematic words
 CUSTOM_PHONEME_DICT = {
     # Islamic greetings and common phrases
-    "السلام": "ɑsːɑlɑːm",
-    "علیکم": "ə.leɪ.kʊm",
-    "سروس": "sər.wis",
-    "لطف": "lət̪f",
-    "ہنسی": "hən.siː",
-    "لین دین": "leːn deːn",
-    "کھلاڑی": "kʰə.lɑː.ɽiː",
+    "السلام": "/as.sa.laː.mu/",
+    "علیکم": " /ʕa.laj.kum/",
+    "وعلیکم": "/wa ʕa.laj.kum/",
+    "سروس": "/ˈsərvɪs/",
+    "لطف": "lʊt̪f",
+    "ہنسی": "/hɛ̃ː.siː/",
+    "لین": "leːn",
+    "دین": " deːn",
+    "کھلاڑی": "kʰɪ.lɑː.ɽiː",
+    "سنوارتے": "sə̃.wɑːr.t̪eː",
+    "اسکول": "ɪs.kuːl",
+    "خوش": "xʊʃ",
+    "کسٹمر": "kəs.tə.mər",
+    "فراہم": "fə.rɑː.həm",
+    "کھلاڑیوں": "kʰɪ.lɑː.ɽi.jõː",
     
     # Add more problematic words as you discover them
     # "word": "phoneme",
