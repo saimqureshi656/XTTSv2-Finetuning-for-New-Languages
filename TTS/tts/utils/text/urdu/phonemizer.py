@@ -10,7 +10,7 @@ CUSTOM_PHONEME_DICT = {
     # Islamic greetings and common phrases
     "السلام": "əs.sɑː.ləm uː",
     "علیکم": "ə.leɪ.kʊm",
-    "وعلیکم": "/wa ʕa.laj.kum/",
+    #"وعلیکم": "/wa ʕa.laj.kum/",
     "سروس": "/ˈsərvɪs/",
     "لطف": "lʊt̪f",
     "ہنسی": "/hɛ̃ː.siː/",
