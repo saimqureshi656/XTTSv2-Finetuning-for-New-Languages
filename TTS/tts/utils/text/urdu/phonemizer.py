@@ -10,7 +10,9 @@ CUSTOM_PHONEME_DICT = {
     # Islamic greetings and common phrases
     "assalam": "ɑsːɑlɑːm",
     "alaikum": "ɑlɑɪkum", 
-    "اسلام علیکم": "əs.sɑː.ləm uː ə.leɪ.kʊm",
+    "اسلام علیکم": "as.sɑː.ləm uː ə.leɪ.kʊm",
+    "السلام": "ɑsːɑlɑːm"
+    "علیکم": "ə.leɪ.kʊm"
     "سروس": "sər.wis",
     "لطف": "lət̪f",
     "ہنسی": "hən.siː",
@@ -63,7 +65,7 @@ def urdu_text_to_phonemes(text: str, use_espeak: bool = True, use_custom_dict: b
         word_phoneme = ""
         
         # Step 1: Check custom dictionary first
-        if use_custom_dict and clean_word in CUSTOM_PHONEME_DICT:
+        if clean_word in CUSTOM_PHONEME_DICT:
             word_phoneme = CUSTOM_PHONEME_DICT[clean_word]
             print(f"Custom dict used for '{clean_word}': {word_phoneme}")
         
