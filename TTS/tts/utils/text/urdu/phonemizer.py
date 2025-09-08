@@ -9,10 +9,10 @@ from .normalize import normalize_urdu_text, preprocess_for_tts
 CUSTOM_PHONEME_DICT = {
     # Islamic greetings and common phrases
     "السلام علیکم": "əs.sɑː.ləm uː ə.leɪ.kʊm",
-    "السلام": "əs.sɑː.ləm uː",
-    "علیکم": "ə.leɪ.kʊm",
+    "السلام": "ælsælæmu",
+    "علیکم": "ɑlɪkæm",
     #"وعلیکم": "/wa ʕa.laj.kum/",
-    "سروس": "/ˈsərvɪs/",
+    "سروس": "sərvɪs",
     "لطف": "lʊt̪f",
     "ہنسی": "/hɛ̃ː.siː/",
     "لین": "leːn",
