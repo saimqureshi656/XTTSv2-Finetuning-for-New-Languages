@@ -7,29 +7,23 @@ from .normalize import normalize_urdu_text, preprocess_for_tts
 
 # Custom phoneme dictionary for problematic words
 CUSTOM_PHONEME_DICT = {
-    # Islamic greetings and common phrases
-    "السلام علیکم": "æs.sæ.læː.m ʊ a.lɛɪ.kʊm",
-    "السلام": "aassalamU",
+    "السلام علیکم": "assalaam u alaikum",
+    "السلام": "assalaamu",
     "علیکم": "alaikum",
-    #"وعلیکم": "/wa ʕa.laj.kum/",
-    "سروس": "sərvɪs",
-    "لطف": "lUt̪f",
-    "ہنسی": "/hɛ̃ː.siː/",
-    "لین": "leːn",
-    "دین": " deːn",
-    "کھلاڑی": "kʰɪ.lɑː.ɽiː",
-    "سنوارتے": "sə̃.wɑːr.t̪eː",
-    "اسکول": "ɪs.kuːl",
-    "خوش": "xʊʃ",
-    "کسٹمر": "kəs.tə.mər",
-    "فراہم": "fə.rɑː.həm",
-    "کھلاڑیوں": "kʰɪ.lɑː.ɽi.jõː",
-    "میٹنگ": "miː.ʈɪŋ",
-    
-    # Add more problematic words as you discover them
-    # "word": "phoneme",
+    "سروس": "service",
+    "لطف": "luTf",
+    "ہنسی": "hasi",
+    "لین": "lein",
+    "دین": "dein",
+    "کھلاڑی": "khilari",
+    "سنوارتے": "sanwaarte",
+    "اسکول": "school",
+    "خوش": "khush",
+    "کسٹمر": "customer",
+    "فراہم": "faraham",
+    "کھلاڑیوں": "khilariyon",
+    "میٹنگ": "meeting"
 }
-
 def add_custom_phoneme(word: str, phoneme: str):
     """Add a new word-phoneme mapping to the custom dictionary"""
     CUSTOM_PHONEME_DICT[word.lower()] = phoneme
